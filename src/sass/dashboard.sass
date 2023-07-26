@@ -1,0 +1,64 @@
+.logo-app
+  margin: 6px 0
+  .user-displayname
+    line-height: 25px
+    height: 25px
+    text-align: center
+
+.dashboard-content
+  .header-container 
+    padding: 8px 16px
+    -webkit-box-shadow: 0 0.46875rem 2.1875rem rgba(4,9,20,.03), 0 0.9375rem 1.40625rem rgba(4,9,20,.03), 0 0.25rem 0.53125rem rgba(4,9,20,.05), 0 0.125rem 0.1875rem rgba(4,9,20,.03)
+    box-shadow: 0 0.46875rem 2.1875rem rgba(4,9,20,.03), 0 0.9375rem 1.40625rem rgba(4,9,20,.03), 0 0.25rem 0.53125rem rgba(4,9,20,.05), 0 0.125rem 0.1875rem rgba(4,9,20,.03)
+    background: var(--bg-main-dashboard)
+    border-bottom: 1.5px solid var(--border-bottom)
+    z-index: 9
+    .main-header
+      display: flex
+      justify-content: space-between
+      align-items: center
+      .hamburger
+        border: none
+        background-color: transparent
+        box-shadow: 0 0 0
+        &:focus
+          box-shadow: 0 0 0 rgb(255, 255, 255)
+      .is-active 
+        transform: rotate(-180deg)
+
+.dashboard-navbar
+  position: fixed
+  font-size: 0px
+  bottom: 0px
+  left: 0px
+  top: 0px
+  background-color: var(--bg-dashboard)
+  box-shadow: 0 0.46875rem 2.1875rem rgba(4, 9, 20, 0.03), 0 0.9375rem 1.40625rem rgba(4, 9, 20, 0.03), 0 0.25rem 0.53125rem rgba(4, 9, 20, 0.05), 0 0.125rem 0.1875rem rgba(4, 9, 20, 0.03)
+  transition: width .28s
+  z-index: 1
+  .ant-menu-inline
+    border-right: 1px solid var(--bg-main-gray)
+  .dashboard-menu
+    .router-link-active
+      background-color: var(--bg-ant-menu)
+      border-right: 3px solid var(--border-ant-menu) !important
+      transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1)
+    .ant-menu-item, .user-displayname
+      color: var(--text-color)
+      span, i
+        color: var(--text-color)
+    .ant-menu-item
+      &:hover
+        background-color: var(--bg-ant-menu)
+  
+.hideSidebar
+  .ant-menu-items-group
+    justify-content: center
+  .ant-menu-item-title
+    display: none
+    transition: 0.3s
+
+
+.page-content 
+  padding: 25px 32px
+  height: inherit
