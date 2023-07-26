@@ -2,8 +2,6 @@
 import { PlusOutlined, DownOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import { convertVN, formatMoney } from "../../composables/convert/convertVN";
 import { useStore } from "../../pinia/store";
-import { doc } from "firebase/firestore";
-import { NumberDecimal } from "ant-design-vue/lib/input-number/src/utils/MiniDecimal";
 export default {
   name: "AddVariations",
   components: {

@@ -19,7 +19,6 @@ export default {
     const { getUser } = useUser();
     const { user } = getUser();
     const route = useRoute();
-    console.log('asdasd', route.meta)
     return {
       user,
       meta: computed(() => route.meta)
