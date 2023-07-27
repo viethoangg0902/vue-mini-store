@@ -276,7 +276,7 @@ export default {
   </div>  
 </template>
 
-<style>
+<style lang="css">
   .label-group input {
     outline: none;
     /* height: 40px; */

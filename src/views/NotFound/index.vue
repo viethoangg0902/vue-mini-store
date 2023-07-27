@@ -42,7 +42,7 @@ export default {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="css">
   .pic-404 {
     position: relative;
     overflow: hidden;

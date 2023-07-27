@@ -205,7 +205,7 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="css">
   .box-file-search {
     width: 250px;
   }

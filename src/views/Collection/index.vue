@@ -167,7 +167,7 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="css">
   .ant-modal-body {
     padding: 20px !important;
   }

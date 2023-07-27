@@ -364,7 +364,7 @@ export default {
   />
 </template>
 
-<style scoped>
+<style scoped lang="css">
   .ant-upload-img {
     width: 110px;
     height: 110px;

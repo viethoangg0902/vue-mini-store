@@ -17,7 +17,8 @@ export default defineConfig({
     __INTLIFY_PROD_DEVTOOLS__: false,
   },
 
-  base: '/dist/',
+  manifest: true,
+  base: '/public_html/build/',
   build: {
     chunkSizeWarningLimit: 1600,
     rollupOptions: {

@@ -214,7 +214,7 @@ export default defineComponent({
   />
 </template>
 
-<style scoped>
+<style scoped lang="css">
   .ant-card-bordered {
     padding: 20px;
   }

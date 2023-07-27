@@ -537,7 +537,7 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="css">
   .ant-card-bordered {
     margin-bottom: 30px;
   }

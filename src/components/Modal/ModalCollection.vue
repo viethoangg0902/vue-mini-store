@@ -255,7 +255,7 @@ export default {
   </a-modal>
 </template>
 
-<style>
+<style lang="css">
   .box-item.active {
     border: 1px solid #1db954 !important;
   }
