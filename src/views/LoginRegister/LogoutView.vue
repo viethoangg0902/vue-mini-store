@@ -9,6 +9,8 @@
       async function logoutUser() {
         window.localStorage.removeItem('collapsed')
         window.localStorage.removeItem('locale')
+        window.localStorage.removeItem('imageAvt')
+        window.localStorage.removeItem('uidCategory')
         await logOut();
         if(!error.value) router.push({ name: "Login", params: {}})
       }

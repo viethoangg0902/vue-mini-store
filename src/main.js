@@ -24,4 +24,3 @@ projectAuth.onAuthStateChanged(() => {
     apps.mount('#app');
   }
 })
-

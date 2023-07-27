@@ -2,7 +2,6 @@
 import "ant-design-vue/dist/antd.css";
 import "../../sass/Login.sass";
 import { ref } from "vue";
-// import { useRouter } from "vue-router";
 import router from "../../router/index.js";
 
 import { useSignIn } from "../../composables/useSignIn.js";
@@ -10,8 +9,6 @@ import { useSignIn } from "../../composables/useSignIn.js";
 export default {
   setup() {
     const { error, isPending, signIn } = useSignIn();
-    // const router = useRouter();
-
     const email = ref("");
     const password = ref("");
     async function handleSubmit() {
