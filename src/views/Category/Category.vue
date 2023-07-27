@@ -41,7 +41,6 @@ export default defineComponent({
       this.loading = true;
       const data = await getDocs(this.dataCategory);
       const task = data.docs.map((doc) => doc.data());
-      console.log('task', task)
       this.dataTable = task;
       this.dataSort = task;
       this.loading = false;
