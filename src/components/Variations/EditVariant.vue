@@ -43,7 +43,7 @@ export default {
   created() {
     this.listAttributes = [...this.dataVariations?.attributes];
     this.listVariations = [...this.dataVariations.variations];
-    console.log("dataVariations", this.dataVariations);
+    // console.log("dataVariations", this.dataVariations);
   },
   emits: ["transmissionVariations"],
   methods: {
@@ -78,47 +78,6 @@ export default {
       )
     },
     handleAddVariaions(listAttr) {
-      // const atts = listAttr.filter((item) => item.name);
-      // const oldVariations = this.listVariations;
-      // this.listVariations = atts
-      //   .reduce((acc, item) => {
-      //     const values = item.value;
-      //     if (acc.length == 0) {
-      //       acc.push(...values);
-      //     } else {
-      //       const length = acc.length;
-      //       for (let i = 0; i < length; i++) {
-      //         for (let j = 0; j < values.length; j++) {
-      //           acc.push(`${acc[i]} / ${values[j]}`);
-      //         }
-      //       }
-      //     }
-      //     return acc;
-      //   }, [])
-      //   .filter((value) => value.split("/").length == atts.length)
-      //   .map((el, index) => {
-      //     const oldVariation = oldVariations.find(
-      //       (variation) => variation.title == el
-      //     );
-      //     return oldVariation
-      //       ? oldVariation
-      //       : {
-      //           id: this.store.randomID(),
-      //           product_name: this.dataVariations.name,
-      //           name: this.dataVariations.name + " - " + el,
-      //           sku: this.dataVariations.sku + '_' + convertVN(el).toUpperCase()
-      //                                           .replaceAll(" / ", "_") 
-      //                                           .replace(" ", "_"),
-      //           price: this.dataVariations.price,
-      //           product_id: this.dataVariations.id,
-      //           original_price: this.dataVariations.original_price,
-      //           title: el,
-      //           remain_quantity: this.remain_quantity, 
-      //           images: [],
-      //           is_hidden: true,
-      //         };
-      //   });
-
       const oldVariations = this.listVariations;
       this.listVariations = listAttr
         .filter((item) => item.name)

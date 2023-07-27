@@ -4,7 +4,7 @@ import "../../sass/collection.sass";
 
 import { formatMoneyChange, convertVN } from "../../composables/convert/convertVN";
 import { toastNotification } from "../../components/Notification/index";
-import EditVariations from "../components/Variations/edit.vue";
+import EditVariations from "../../components/Variations/EditVariant.vue";
 import ModalCollection from "../../components/Modal/ModalCollection.vue";
 import ModalSortImage from "../../components/Modal/ModalSortImage.vue";
 
