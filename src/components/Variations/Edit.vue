@@ -43,7 +43,7 @@ export default {
   created() {
     this.listAttributes = [...this.dataVariations?.attributes];
     this.listVariations = [...this.dataVariations.variations];
-    // console.log("dataVariations", this.dataVariations);
+    console.log("dataVariations", this.dataVariations);
   },
   emits: ["transmissionVariations"],
   methods: {
@@ -189,22 +189,19 @@ export default {
 </script>
 
 <template>
-  <div class="ant-card-variations">
+  <div class="ant-card-variations"> 
     <div class="ant-collapse-header p-4">
       <button class="border-0 background-transparent p-0 fw-600">
         <down-outlined class="mr-2" />
-        <span>Thông tin mẫu mã</span>
+        <span>{{ $t('Variant information') }}</span>
       </button>
     </div>
     <div class="ant-collapse-content w-100">
       <a-row class="align-items-center">
         <a-col :span="18">
           <div class="">
-            <p class="fw-500 mb-1">Tạo mẫu mã</p>
-            <span class="fw-300 text-14"
-              >Thêm mẫu mã sản phẩm được sử dụng quản lý sản phẩm có những hình
-              thái khác nhau như: kích thước, màu sắc,...</span
-            >
+            <p class="fw-500 mb-1">{{ $t('Create variant') }}</p>
+            <span class="fw-300 text-14">{{ $t('Add product models used to manage products with different forms such as size, color,...') }}</span>
           </div>
         </a-col>
         <a-col :span="6">
@@ -214,7 +211,7 @@ export default {
               @click="onAddAttributes"
             >
               <plus-outlined class="text-14" />
-              Thêm thuộc tính
+              {{ $t('Add attribute') }}
             </button>
           </div>
         </a-col>
@@ -223,10 +220,10 @@ export default {
         <div class="variant-header">
           <a-row class="mb-2 variant-list">
             <a-col :span="6" class="pr-3">
-              <span class="variant-item--name"> Tên thuộc tính </span>
+              <span class="variant-item--name">{{ $t('Name of attribute') }}</span>
             </a-col>
             <a-col :span="18" class="pl-3">
-              <span class="variant-item--property"> Giá trị thuộc tính </span>
+              <span class="variant-item--property">{{ $t('Value of attribute') }}</span>
             </a-col>
           </a-row>
         </div>
@@ -271,11 +268,8 @@ export default {
         </div>
         <div class="ui-product-variant">
           <div class="">
-            <b>Sửa đổi các mẫu mã đã tạo</b>
-            <p class="mb-2">
-              Chỉnh sửa lại thông tin về giá, SKU, Số lượng,... cho các mẫu mã
-              đã tạo
-            </p>
+            <b>{{ $t('Modify the variations created') }}</b>
+            <p class="mb-2">{{ $t('Edit information about price, SKU, Quantity,... for created models') }}</p>
           </div>
           <a-table
             class="table-page-active"
@@ -283,14 +277,14 @@ export default {
             :pagination="false"
             bordered
           >
-            <a-table-column title="Mẫu mã">
+            <a-table-column :title="$t('Variant')">
               <template #default="{ record }">
                 <div class="d-flex align-items-center gap-3">
                   <span>{{ record.title.replaceAll("/", "|") }}</span>
                 </div>
               </template>
             </a-table-column>
-            <a-table-column title="SKU" class="w-15">
+            <a-table-column :title="$t('SKU')" class="w-15">
               <template #default="{ record }">
                 <span class="fw-300">
                   {{
@@ -299,33 +293,33 @@ export default {
                 </span>
               </template>
             </a-table-column>
-            <a-table-column title="Giá bán (đ)" class="w-15">
+            <a-table-column :title="$t('Price') + '(đ)'" class="w-15">
               <template #default="{ record }">
                 <span>
                   {{ formatMoney((record.price)) }}
                 </span>
               </template>
             </a-table-column>
-            <a-table-column title="Giá gốc (đ)" class="w-15">
+            <a-table-column :title="$t('Original price') + '(đ)'" class="w-15">
               <template #default="{ record }">
                 <span>
                   {{ formatMoney(record.original_price) }}
                 </span>
               </template>
             </a-table-column>
-            <a-table-column title="Số lượng" class="w-15">
+            <a-table-column :title="$t('Quantity')" class="w-15">
               <template #default="{ record }">
                 <span>
                   {{ record.remain_quantity }}
                 </span>
               </template>
             </a-table-column>
-            <a-table-column title="Hành động" class="w-15">
+            <a-table-column :title="$t('Action')" class="w-15">
               <template #default="{ record }">
                 <div class="btn-act">
                   <a-tooltip placement="top">
                     <template #title>
-                      <span>Xoá mẫu mã</span>
+                      <span>{{ $t('Delete product') }}</span>
                     </template>
                     <button
                       class="border-0 mx-1 background-transparent cursor-pointer"
@@ -335,7 +329,7 @@ export default {
                   </a-tooltip>
                   <a-tooltip placement="top">
                     <template #title>
-                      <span>Chỉnh sửa mẫu mã</span>
+                      <span>{{ $t('Edit Variation') }}</span>
                     </template>
                     <button
                       class="border-0 mx-1 background-transparent cursor-pointer"

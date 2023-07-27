@@ -77,7 +77,7 @@ export default defineComponent({
           id: this.uid,
           is_hidden: true,
           description: this.description,
-          image: await this.onUploadFile(this.store.listFiles, this.uidUser),
+          images: await this.onUploadFile(this.store.listFiles, this.uidUser),
           slug: this.slug,
           total_products: 0
         })
@@ -102,11 +102,11 @@ export default defineComponent({
             :to="{ name: 'Category', params: {} }"
             class="border-0 cursor-pointer"
           >
-            Huỷ
+            {{ $t('Cancel') }}
           </router-link>
           <button class="btn-green border-0 cursor-pointer" @click="handleNewCategory()">
             <plus-outlined class="text-15" />
-            Thêm mới
+            {{ $t('Create new') }}
           </button>
         </div>
       </div>
@@ -115,7 +115,7 @@ export default defineComponent({
           <a-col :span="20" class="pr-4">
             <div class="ant-card ant-card-bordered">
               <div class="label-group mb-5">
-                <label>Tên danh mục</label>
+                <label>{{ $t('Category name') }}</label>
                 <input 
                   v-model="this.name" 
                   @keyup="handleChangeName"
@@ -124,7 +124,7 @@ export default defineComponent({
               </div>
               <div class="mb-4">
                 <div class="label-group mb-3">
-                  <label>Hình ảnh</label>
+                  <label>{{ $t('Image') }}</label>
                   <!-- <div class="relative group-img">
                     <label for="handleFile" class="cursor-pointer">
                       <div class="ant-upload-img">
@@ -188,12 +188,12 @@ export default defineComponent({
                 <div class="btn-sort" v-if="this.store.listFiles.length < 1">
                   <button class="btn-select-album" @click="this.store.showModalCollection">
                     <FolderOpenOutlined class="text-15 mr-2" />
-                    <span class="text-14">Tải ảnh từ bộ sưu tập của bạn</span>
+                    <span class="text-14">{{ $t('Get photos from your collection') }}</span>
                   </button>
                 </div>
               </div>
               <div class="label-group">
-                <label>Mô tả</label>
+                <label>{{ $t('Short description') }}</label>
                 <editor 
                   v-model="this.description"
                   :api-key="this.setupEditor.apiKey"
@@ -205,7 +205,7 @@ export default defineComponent({
           <a-col :span="4">
             <div class="ant-card ant-card-bordered">
               <div class="label-group mb-4">
-                <label>Đường dẫn mặc định</label>
+                <label>{{ $t('Default path') }}</label>
                 <input 
                   v-model="this.slug" 
                   class="label-group-input d-block w-full" placeholder="Nhập đường dẫn" disabled/>

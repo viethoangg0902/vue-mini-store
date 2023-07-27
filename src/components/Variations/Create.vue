@@ -152,22 +152,22 @@ export default {
     <div class="ant-collapse-header p-4">
       <button class="border-0 background-transparent p-0 fw-600">
         <down-outlined class="mr-2"/>
-        <span>Thông tin mẫu mã</span>
+        <span>{{ $t('Variant information') }}</span>
       </button>
     </div>
     <div class="ant-collapse-content w-100">
       <a-row class="align-items-center">
         <a-col :span="18">
           <div class="">
-            <p class="fw-500 mb-1">Tạo mẫu mã</p>
-            <span class="fw-300 text-14">Thêm mẫu mã sản phẩm được sử dụng quản lý sản phẩm có những hình thái khác nhau như: kích thước, màu sắc,...</span>
+            <p class="fw-500 mb-1">{{ $t('Create variant') }}</p>
+            <span class="fw-300 text-14">{{ $t('Add product models used to manage products with different forms such as size, color,...') }}</span>
           </div>
         </a-col>
         <a-col :span="6">
           <div class="text-end">
             <button class="border-0 background-transparent color-1db954" @click="onAddAttributes">
               <plus-outlined class="text-14" />
-              Thêm thuộc tính
+              {{ $t('Add attribute') }}
             </button>
           </div>
         </a-col>
@@ -177,12 +177,12 @@ export default {
           <a-row class="mb-2 variant-list">
             <a-col :span="6" class="pr-3">
               <span class="variant-item--name">
-                Tên thuộc tính
+                {{ $t('Name of attribute') }}
               </span>
             </a-col>
             <a-col :span="18" class="pl-3">
               <span class="variant-item--property">
-                Giá trị thuộc tính
+                {{ $t('Value of attribute') }}
               </span>
             </a-col>
           </a-row>
@@ -220,8 +220,8 @@ export default {
         </div>
         <div class="ui-product-variant">
           <div class="">
-            <b>Sửa đổi các mẫu mã đã tạo</b>
-            <p class="mb-2">Chỉnh sửa lại thông tin về giá, SKU, Số lượng,... cho các mẫu mã đã tạo</p>
+            <b>{{ $t('Modify the variations created') }}</b>
+            <p class="mb-2">{{ $t('Edit information about price, SKU, Quantity,... for created models') }}</p>
           </div>
           <a-table
             class="table-page-active"
@@ -229,14 +229,14 @@ export default {
             :pagination="false"
             bordered
           >
-            <a-table-column title="Mẫu mã" class="w-35">
+            <a-table-column :title="$t('Variant')" class="w-35">
               <template #default="{ record }">
                 <div class="d-flex align-items-center gap-3">
                   <span>{{ record.title.replaceAll("/", "|")  }}</span>
                 </div>
               </template>
             </a-table-column>
-            <a-table-column title="SKU" class="w-25">
+            <a-table-column :title="$t('SKU')" class="w-25">
               <template #default="{ record }">
                 <span class="fw-300">
                   {{ this.dataVariations.sku + '_' + 
@@ -247,21 +247,21 @@ export default {
                 </span>
               </template>
             </a-table-column>
-            <a-table-column title="Giá bán (đ)" class="w-10">
+            <a-table-column :title="$t('Price') + '(đ)'" class="w-10">
               <template #default="{ record }">
                 <span>
                   <input type="text" v-model="record.price" @keyup="this.price = $event.target.value" class="py-1 px-3"/> 
                 </span>
               </template>
             </a-table-column>
-            <a-table-column title="Giá gốc (đ)" class="w-10">
+            <a-table-column :title="$t('Original price') + '(đ)'" class="w-10">
               <template #default="{ record }">
                 <span>
                   <input type="text" v-model="record.original_price" @keyup="this.original_price = $event.target.value" class="py-1 px-3"/> 
                 </span>
               </template>
             </a-table-column>
-            <a-table-column title="Số lượng" class="w-10">
+            <a-table-column :title="$t('Quantity')" class="w-10">
               <template #default="{ record }">
                 <span>
                   <!-- <input v-model="record.remain_quantity" @keyup="this.remain_quantity = Number($event.target.value)" type="number" class="py-1 px-3 input_remain_quantity"/> -->

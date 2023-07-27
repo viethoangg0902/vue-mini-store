@@ -3,7 +3,7 @@ import "../../sass/dashboard.sass";
 import "../../sass/collection.sass";
 
 import { defineComponent, createVNode } from "vue";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons-vue";
+import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons-vue";
 import { Modal } from "ant-design-vue";
 
 import { useUser } from "../../composables/useUser";
@@ -15,6 +15,7 @@ export default defineComponent({
     PlusOutlined,
     EditOutlined,
     DeleteOutlined,
+    SearchOutlined,
     Modal
   },
   data() {
@@ -27,7 +28,8 @@ export default defineComponent({
       loading: false,
       store,
       db: store.db,
-      uidData
+      uidData,
+      dataSort: []
     }
   },
   created() {
@@ -38,8 +40,10 @@ export default defineComponent({
     async getDataCategories() {
       this.loading = true;
       const data = await getDocs(this.dataCategory);
-      const task = data.docs.map((doc) => doc.data())
+      const task = data.docs.map((doc) => doc.data());
+      console.log('task', task)
       this.dataTable = task;
+      this.dataSort = task;
       this.loading = false;
     },
     async handleChangeIsHidden(id, status) {
@@ -59,6 +63,10 @@ export default defineComponent({
           id: id
         }
       })
+    },
+    handleChangeSearch(e) {
+      let keyword = e.target.value;
+      this.dataSort = this.dataTable.filter(task => !keyword || task.name.toLowerCase().includes(keyword));
     },
     async handleDelete(id) {
       const _this = this;
@@ -84,22 +92,28 @@ export default defineComponent({
   <div class="collection-container">
     <div class="page-content">
       <div class="box-file-title">
-        <h1>Danh mục</h1>
-        <p>Cho phép tạo danh mục sản phẩm hoặc nhóm các sản phẩm</p>
+        <h1>{{ $t('Category') }}</h1>
+        <p>{{ $t('Allow create product category or products group') }}</p>
       </div>
       <div class="box-file-created d-flex justify-content-between mb-4">
-        <div class="box-file-search">asd</div>
+        <div class="box-file-search">
+          <a-input placeholder="Tìm kiếm" @keyup="handleChangeSearch">
+            <template #prefix>
+              <search-outlined class="text-18"/>
+            </template>
+          </a-input>
+        </div>
         <div class="box-file-created-btn">
           <button class="btn-green border-0 cursor-pointer" @click="this.store.handleNew('Create Category')">
             <plus-outlined class="text-15" />
-            Tạo mới
+            {{ $t('Create new') }}
           </button>
         </div>
       </div>
       <div class="collection-media-table">
         <div class="media-table-header">
           <div class="media-table-header-left text-16" style="color: var(--text-color-black);">
-            Danh mục <span>{{ this.dataTable.length }} danh mục</span>
+            {{ $t('Category') }} <span style="text-transform: lowercase;">{{ this.dataSort.length }} {{ $t('Category') }}</span>
           </div>
           <div class="media-table-header-right">
             <div class="header-right">
@@ -125,41 +139,41 @@ export default defineComponent({
         <div class="media-table-body">
           <a-table
             class="table-page-active"
-            :data-source="this.dataTable"
+            :data-source="this.dataSort"
             :pagination="false"
             :loading="this.loading"
             bordered
           >
-            <a-table-column title="Tên danh mục">
+            <a-table-column :title="$t('Category name')">
               <template #default="{ record }">
                 <div class="d-flex align-items-center gap-3">
                   <div class="product-image">
-                    <img :src="record.image != '' ? record.image : this.store.NotImage"/>
+                    <img :src="record.images.length != 0 ? record.images[0] : this.store.NotImage"/>
                   </div>
                   <span>{{ record.name }}</span>
                 </div>
               </template>
             </a-table-column>
-            <a-table-column title="Số lượng sản phẩm" class="w-15">
+            <a-table-column :title="$t('Quantity products')" class="w-15">
               <template #default="{ record }">
                 <span>
                   {{ record.total_products }}
                 </span>
               </template>
             </a-table-column>
-            <a-table-column title="Trạng thái" class="w-15">
+            <a-table-column :title="$t('Status')" class="w-15">
               <template #default="{ record }">
                 <span>
                   <a-switch v-model:checked="record.is_hidden" @change="handleChangeIsHidden(record.id, !record.is_hidden)"/>
                 </span>
               </template>
             </a-table-column>
-            <a-table-column title="Hành động" class="w-15">
+            <a-table-column :title="$t('Action')" class="w-15">
               <template #default="{ record }">
                 <div class="btn-act">
                   <a-tooltip placement="top">
                     <template #title>
-                      <span>Chỉnh sửa</span>
+                      <span>{{ $t('Edit') }}</span>
                     </template>
                     <button class="border-0 mx-2 background-transparent cursor-pointer" @click="handleClickEdit(record.id)">
                       <edit-outlined class="text-18"/>
@@ -167,7 +181,7 @@ export default defineComponent({
                   </a-tooltip>
                   <a-tooltip placement="top">
                     <template #title>
-                      <span>Xoá danh mục</span>
+                      <span>{{ $t('Delete category') }}</span>
                     </template>
                     <button class="border-0 mx-2 background-transparent cursor-pointer" @click="handleDelete(record.id)">
                       <delete-outlined class="text-18"/>
@@ -190,3 +204,14 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
+<style scoped>
+  .box-file-search {
+    width: 250px;
+  }
+
+  .ant-input-affix-wrapper {
+    height: 100%;
+    border-radius: 6px;
+  }
+</style>

@@ -68,8 +68,7 @@ export default {
         this.data = docSnap.data();
         this.quantity = this.data.quantity;
         this.listVariat = this.data.variations;
-        this.dataVariat = this.listVariat.filter(el => el.id == id)
-
+        this.dataVariat = this.listVariat.filter(el => el.id == this.idVariat)
         this.price = `${this.formatMoneyChange(`${this.dataVariat[0].price}`)}`;
         this.original_price = `${this.formatMoneyChange(`${this.dataVariat[0].original_price}`)}`;
         this.properties = this.dataVariat[0].properties;
@@ -78,7 +77,6 @@ export default {
         this.remain_quantity = this.dataVariat[0].remain_quantity;
 
         this.images = this.dataVariat[0].images;
-
         if(this.images.length != 0) {
           this.store.listFiles = this.images;
         } else {
@@ -166,7 +164,7 @@ export default {
               </div>
               <div class="variat-title">
                 <h3 class="mb-0 color-1db954">{{ this.data.name }}</h3>
-                <p class="mb-0" style="color: var(--text-color);">{{ this.listVariat.length }} mẫu mã</p>
+                <p class="mb-0" style="color: var(--text-color); text-transform: lowercase;">{{ this.listVariat.length }} {{ $t('Variant') }}</p>
               </div>
             </div>
           </router-link>
@@ -174,7 +172,7 @@ export default {
         <div class="box-file-created-btn">
           <button class="btn-green border-0 cursor-pointer" @click="handleUpVariat()">
             <cloud-upload-outlined class="text-14 mr-1"/>
-            Lưu chỉnh sửa
+            {{ $t('Save edit') }}
           </button>
         </div>
       </div>
@@ -185,7 +183,7 @@ export default {
             <div class="ant-card ant-card-bordered">
               <div class="ant-card-body">
                 <div class="product-info--block__header d-flex justify-content-between p-4">
-                  <div class="d-block-title fw-600">Mẫu mã</div>
+                  <div class="d-block-title fw-600">{{ $t('Variant') }}</div>
                   <div class="d-amount-blogs">
                     <p class="mb-0">{{ this.dataVariat[0].title }}</p>
                   </div>
@@ -215,7 +213,7 @@ export default {
               <div class="ant-card-body">
                 <div class="p-4">
                   <div class="product-info--block__header pb-4">
-                    <div class="d-block-title fw-600">Ảnh mẫu mã</div>
+                    <div class="d-block-title fw-600">{{ $t('Variant images') }}</div>
                   </div>
                   <div class="images-edit-variant form-section">
                     <div class="upload-image-custom mb-4">
@@ -255,10 +253,10 @@ export default {
                     <div class="btn-sort">
                       <button class="btn-select-album" @click="this.store.showModalCollection">
                         <FolderOpenOutlined class="text-15 mr-2" />
-                        <span class="text-14">Tải ảnh từ bộ sưu tập của bạn</span>
+                        <span class="text-14">{{ $t('Get photos from your collection') }}</span>
                       </button>
                       <button class="btn-select-album ml-4" @click="this.store.onSortImg" v-if="this.store.listFiles.length >= 2">
-                        <span>Sắp xếp</span>
+                        <span>{{ $t('Sort') }}</span>
                       </button>
                     </div>
                   </div>
@@ -268,7 +266,7 @@ export default {
             <div class="ant-card ant-card-bordered mb-4">
               <div class="ant-collapse-header p-4">
                 <div class="p-0 fw-600 mb-4">
-                  Thông tin mẫu mã
+                  {{ $t('Variant property') }}
                 </div>
                 <div class="label-group mt-3" v-for="(property, index) in this.properties" :key="index">
                   <label class="mb-0">{{ property.name}}</label>
@@ -288,7 +286,7 @@ export default {
                 <a-row>
                   <a-col :span="12" class="pr-4">
                     <div class="label-group">
-                      <label>Giá bán mẫu mã</label>
+                      <label>{{ $t('Variant price') }}</label>
                       <div class="relative">
                         <input 
                           v-model="this.price" 
@@ -305,7 +303,7 @@ export default {
                   </a-col>
                   <a-col :span="12" class="pl-4">
                     <div class="label-group">
-                      <label>Giá gốc mẫu mã</label>
+                      <label>{{ $t('Variant original price' )}}</label>
                       <div class="relative">
                         <input 
                           v-model="this.original_price" 
@@ -328,7 +326,7 @@ export default {
                 <a-row>
                   <a-col :span="12" class="pr-4">
                     <div class="label-group">
-                      <label>SKU mẫu mã</label>
+                      <label>{{ $t('SKU product') }}</label>
                       <div class="relative">
                         <input 
                           v-model="this.sku" 
@@ -341,7 +339,7 @@ export default {
                   </a-col>
                   <a-col :span="12" class="pl-4">
                     <div class="label-group">
-                      <label>Số lượng</label>
+                      <label>{{ $t('Quantity') }}</label>
                       <div class="relative">
                         <input 
                           v-model="this.remain_quantity" 

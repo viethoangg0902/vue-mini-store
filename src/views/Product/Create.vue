@@ -4,7 +4,7 @@ import "../../sass/collection.sass";
 
 import { formatMoneyChange, convertVN } from "../../composables/convert/convertVN";
 import { toastNotification } from "../../components/Notification/index";
-import AddVariations from "../../components/Variations/add.vue";
+import AddVariations from "../../components/Variations/Create.vue";
 import ModalCollection from "../../components/Modal/ModalCollection.vue";
 
 import { setupEditor } from "../../components/Tinymce/index";
@@ -99,26 +99,55 @@ export default defineComponent({
       this.handleCheckSlug(this.slug);
     },
     handleChangePrice(type) {
-      let value = event.target.value;
+      let currentValue = event.target.value;
       
-      switch (type) {
-        case 'price':
-          if(value == "") {
-            this.price = "0";
-          } else {
-            this.price = `${this.formatMoneyChange(value.replace(/[^0-9]/g, ''))}`
-          }
-          break;
-        case 'original_price':
-          if(value == "") {
-            this.original_price = "0";
-          } else {
-            this.original_price = `${this.formatMoneyChange(value.replace(/[^0-9]/g, ''))}`
-          }
-          break;
-        default:
-          break;
+      // switch (type) {
+      //   case 'price':
+      //     if(value == "") {
+      //       this.price = "0";
+      //     } else {
+      //       this.price = `${this.formatMoneyChange(currentValue.replace(/[^0-9]/g, ''))}`
+      //     }
+      //     break;
+      //   case 'original_price':
+      //     if(value == "") {
+      //       this.original_price = "0";
+      //     } else {
+      //       this.original_price = `${this.formatMoneyChange(currentValue.replace(/[^0-9]/g, ''))}`
+      //     }
+      //     break;
+      //   default:
+      //     break;
+
+        const charCode = event.which ? event.which : event.keyCode;
+        switch(type) {
+          case 'price':
+            if(currentValue == '') {
+              this.price = '0'
+            } else {
+              if(charCode > 31 && (charCode < 48 || charCode > 57)) {
+                this.price = `${this.formatMoneyChange(`${this.price}`)}`;
+              } else {
+                this.price = `${this.formatMoneyChange(`${this.price}`)}`
+              }
+            }
+            break;
+          case 'original_price':
+            if(currentValue == '') {
+              this.original_price = '0'
+            } else {
+              if(charCode > 31 && (charCode < 48 || charCode > 57)) {
+                this.original_price = `${this.formatMoneyChange(`${this.original_price}`)}`;;
+              } else {
+                this.original_price = `${this.formatMoneyChange(`${this.original_price}`)}`
+              }
+            }
+            break;
+          default:
+            break;
       }
+
+      
     },    
     async handleNewProduct() {
       if(this.name == "" || this.sku == "") {
@@ -177,14 +206,14 @@ export default defineComponent({
                 <div class="ant-collapse-header p-4">
                   <button class="border-0 background-transparent p-0 fw-600">
                     <down-outlined class="mr-2"/>
-                    <span>Thông tin cơ bản</span>
+                    <span>{{ $t('Basic information') }}</span>
                   </button>
                 </div>
                 <div class="ant-collapse-content">
                   <a-row class="mb-4">
                     <a-col :span="12" class="pr-3">
                       <div class="label-group">
-                        <label>Tên sản phẩn</label>
+                        <label>{{ $t('Product name') }}</label>
                         <input 
                           v-model="this.name" 
                           @keyup="handleChangeName"
@@ -194,7 +223,7 @@ export default defineComponent({
                     </a-col>
                     <a-col :span="12" class="pl-3">
                       <div class="label-group">
-                        <label>SKU sản phẩm</label>
+                        <label>{{ $t('SKU product') }}</label>
                         <input 
                           v-model="this.sku" 
                           class="label-group-input d-block w-full" placeholder="Thêm SKU sản phẩm"
@@ -205,7 +234,7 @@ export default defineComponent({
                   <a-row class="mb-4">
                     <a-col :span="24">
                       <div class="label-group">
-                        <label>Mô tả ngắn</label>
+                        <label>{{ $t('Short description') }}</label>
                         <editor 
                           v-model="this.description"
                           :api-key="this.setupEditor.apiKey"
@@ -217,7 +246,7 @@ export default defineComponent({
                   <a-row>
                     <a-col :span="24">
                       <div class="label-group">
-                        <label>Danh mục</label>
+                        <label>{{ $t('Category') }}</label>
                         <a-select
                           v-model:value="this.categories"
                           :options="this.options"
@@ -237,7 +266,7 @@ export default defineComponent({
                 <div class="ant-collapse-header p-4">
                   <button class="border-0 background-transparent p-0 fw-600">
                     <down-outlined class="mr-2"/>
-                    <span>Ảnh sản phẩm</span>
+                    <span>{{ $t('Product images') }}</span>
                   </button>
                 </div>
                 <div class="ant-collapse-content">
@@ -279,10 +308,10 @@ export default defineComponent({
                     <div class="btn-sort">
                       <button class="btn-select-album" @click="this.store.showModalCollection">
                         <FolderOpenOutlined class="text-15 mr-2" />
-                        <span class="text-14">Tải ảnh từ bộ sưu tập của bạn</span>
+                        <span class="text-14">{{ $t('Get photos from your collection') }}</span>
                       </button>
                       <button class="btn-select-album ml-4" @click="this.store.onSortImg" v-if="this.store.listFiles.length >= 2">
-                        <span>Sắp xếp</span>
+                        <span>{{ $t('Sort') }}</span>
                       </button>
                     </div>
                   </div>
@@ -292,7 +321,7 @@ export default defineComponent({
                 <div class="ant-collapse-header p-4">
                   <button class="border-0 background-transparent p-0 fw-600">
                     <down-outlined class="mr-2"/>
-                    <span>Giá sản phẩm</span>
+                    <span>{{ $t('Product price') }}</span>
                   </button>
                 </div>
                 <div class="ant-collapse-content">
@@ -300,7 +329,7 @@ export default defineComponent({
                     <a-row class="mb-4">
                       <a-col :span="12" class="pr-3">
                         <div class="label-group">
-                          <label>Giá bán</label>
+                          <label>{{ $t('Price') }}</label>
                           <div class="relative">
                             <input 
                               v-model="this.price" 
@@ -317,7 +346,7 @@ export default defineComponent({
                       </a-col>
                       <a-col :span="12" class="pl-3">
                         <div class="label-group">
-                          <label>Giá gốc sản phẩm</label>
+                          <label>{{ $t('Original price') }}</label>
                           <div class="relative">
                             <input 
                               v-model="this.original_price" 
@@ -367,28 +396,28 @@ export default defineComponent({
                     <div class="product-side--right__item">
                       <div class="ant-anchor-link ant-anchor-link-active">
                         <a class="ant-anchor-link-title ant-anchor-link-title-active" href="#basicInfo" title="Thông tin cơ bản">
-                          Thông tin cơ bản
+                          {{ $t('Basic information') }}
                         </a>
                       </div>
                     </div>
                     <div class="product-side--right__item">
                       <div class="ant-anchor-link ant-anchor-link-active">
                         <a class="ant-anchor-link-title ant-anchor-link-title-active" href="#images" title="Ảnh sản phẩm">
-                          Ảnh sản phẩm
+                          {{ $t('Product images') }}
                         </a>
                       </div>
                     </div>
                     <div class="product-side--right__item">
                       <div class="ant-anchor-link ant-anchor-link-active">
                         <a class="ant-anchor-link-title ant-anchor-link-title-active" href="#price" title="Giá sản phẩm">
-                          Giá sản phẩm
+                          {{ $t('Product price') }}
                         </a>
                       </div>
                     </div>
                     <div class="product-side--right__item">
                       <div class="ant-anchor-link ant-anchor-link-active">
                         <a class="ant-anchor-link-title ant-anchor-link-title-active" href="#variantInfo" title="Thông tin mẫu mã">
-                          Thông tin mẫu mã
+                          {{ $t('Variant information') }}
                         </a>
                       </div>
                     </div>
