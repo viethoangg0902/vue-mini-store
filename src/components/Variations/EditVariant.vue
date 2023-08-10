@@ -8,7 +8,7 @@ import {
 import { convertVN, formatMoney, formatMoneyChange } from "../../composables/convert/convertVN";
 import { useStore } from "../../pinia/store";
 export default {
-  name: "EditVariations",
+  name: "EditVariation",
   components: {
     PlusOutlined,
     DownOutlined,
@@ -141,7 +141,15 @@ export default {
       });
     },
     handleDeleteAttr(id) {
-      console.log("id delete", id);
+      this.listAttributes = this.listAttributes.filter((item) => item.id !== id)
+      this.handleAddVariaions(this.listAttributes);
+      this.$emit('transmissionVariations', 
+        {
+          variations: this.listVariations, 
+          attributes: this.listAttributes,
+          quantity: this.quantity
+        }
+      )
     },
   },
 };

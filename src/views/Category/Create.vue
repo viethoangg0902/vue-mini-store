@@ -73,7 +73,7 @@ export default defineComponent({
         return;
       } else {
         await setDoc(doc(this.db, this.uidData + 'Categories', `${this.uid}`), {
-          name: this.name, 
+          name: this.name.charAt(0).toUpperCase() + this.name.slice(1), 
           id: this.uid,
           is_hidden: true,
           description: this.description,
@@ -125,32 +125,6 @@ export default defineComponent({
               <div class="mb-4">
                 <div class="label-group mb-3">
                   <label>{{ $t('Image') }}</label>
-                  <!-- <div class="relative group-img">
-                    <label for="handleFile" class="cursor-pointer">
-                      <div class="ant-upload-img">
-                        <div class="w-full h-100" v-if="this.store.listFiles != null">
-                          <img
-                            v-for="img in this.store.listFiles"
-                            :src="img.blob ? img.image : img"
-                            width="140"
-                            height="140"
-                            style="border-radius: 8px; width: 100%; height: 100%;"
-                            class="w-full"
-                          />
-                        </div>
-                        <plus-circle-outlined class="text-24" style="color: #1db954" v-else/>
-                      </div>
-                      <input
-                        type="file"
-                        class="h-0 w-0 overflow-hidden d-none"
-                        id="handleFile"
-                        @change="this.store.onChangeFile"
-                      />
-                    </label>
-                    <button class="absolute cursor-pointe" @click="this.store.filePreview = null" v-if="this.store.filePreview != null">
-                      <delete-outlined class="text-13"/>
-                    </button>
-                  </div> -->
                   <div class="upload-image-custom mb-4">
                     <div class="ant-upload-lists w-full">
                       <div class="relative group-img" v-for="img in this.store.listFiles" :key="img">

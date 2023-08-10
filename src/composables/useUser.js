@@ -14,6 +14,10 @@ let collapsedWidth = [
   }
 ]
 let language = "vi";
+    
+if(!window.localStorage.getItem('locale')) {
+  window.localStorage.setItem('locale', language)
+}
 
 projectAuth.onAuthStateChanged(function (_user) {
   // console.log('+_user', user)
@@ -25,10 +29,6 @@ projectAuth.onAuthStateChanged(function (_user) {
 
     if(!window.localStorage.getItem('collapsed')) {
       window.localStorage.setItem('collapsed', JSON.stringify(collapsedWidth))
-    }
-    
-    if(!window.localStorage.getItem('locale')) {
-      window.localStorage.setItem('locale', language)
     }
   }
 });

@@ -68,5 +68,11 @@
   "Name": "Tên",
   "Phone number": "Số điện thoại",
   "Display name": "Tên hiển thị",
-  "Avatar": "Hình đại diện"
+  "Avatar": "Hình đại diện",
+  "Warning": "Cảnh báo",
+  "To successfully import products, excel files need to be written in the correct sample file format": "Để nhập sản phẩm thành công tệp excel cần được viết đúng định dạng file mẫu",
+  "Your file is missing a field": "Tệp của bạn bị thiếu một trường",
+  "Selected": "Đã chọn",
+  "Are you sure you want to delete this product? This action cannot be undone": "Bạn có chắc chắn muốn xóa sản phẩm này không? Hành động này không thể được hoàn tác",
+  "Are you sure you want to delete this category? This action cannot be undone": "Bạn có chắc chắn muốn xoá danh mục này không? Hành động này không thể được hoàn tác"
 }

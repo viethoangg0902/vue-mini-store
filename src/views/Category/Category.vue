@@ -6,6 +6,7 @@ import { defineComponent, createVNode } from "vue";
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons-vue";
 import { Modal } from "ant-design-vue";
 
+import ModalDeleteAll from "../../components/Modal/ModalDeleteAll.vue";
 import { useUser } from "../../composables/useUser";
 import { useStore } from "../../pinia/store";
 import { collection, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
@@ -16,7 +17,8 @@ export default defineComponent({
     EditOutlined,
     DeleteOutlined,
     SearchOutlined,
-    Modal
+    Modal,
+    ModalDeleteAll
   },
   data() {
     const { getUser } = useUser();
@@ -29,7 +31,11 @@ export default defineComponent({
       store,
       db: store.db,
       uidData,
-      dataSort: []
+      dataSort: [],
+      selectedRowKeys: [],
+      selectedRows: [],
+      title: 'danh mục',
+      nameOption: 'Categories'
     }
   },
   created() {
@@ -82,6 +88,16 @@ export default defineComponent({
           toastNotification('success', 'Xoá danh mục thành công', '')
         },
       });
+    },
+    handleDeleteAll(data) {
+      console.log('data', data)
+      this.dataSort = [...data];
+      this.dataTable = [...data];
+      this.selectedRowKeys = [];
+    },
+    onSelectChange(selectedRowKeys, selectedRows) {
+      this.selectedRows = selectedRows;
+      this.selectedRowKeys = selectedRowKeys;
     }
   }
 })
@@ -112,12 +128,33 @@ export default defineComponent({
       <div class="collection-media-table">
         <div class="media-table-header">
           <div class="media-table-header-left text-16" style="color: var(--text-color-black);">
-            {{ $t('Category') }} <span style="text-transform: lowercase;">{{ this.dataSort.length }} {{ $t('Category') }}</span>
+            {{ $t('Category') }} 
+            <span style="text-transform: lowercase;">{{ this.dataSort.length }} {{ $t('Category') }}</span>
+            <span style="text-transform: lowercase; background-color: #FFFAEB; color: #DC6803; border: 1px solid #DC6803" v-if="this.selectedRowKeys.length != 0"> 
+              {{ this.selectedRowKeys.length }} {{ $t('Selected') }}
+            </span>
           </div>
           <div class="media-table-header-right">
             <div class="header-right">
-              <div class="media-header-upload">
-                <button>
+              <div class="media-header-upload d-flex gap-2">
+                <ModalDeleteAll 
+                  :data="
+                    {
+                      selectedRows: this.selectedRows,
+                      selectedRowKeys: this.selectedRowKeys,
+                      uidData: this.uidData,
+                      dataSort: this.dataSort,
+                      title: title,
+                      nameOption: nameOption
+                    } 
+                  "
+                  @isHandleDeleteAll="handleDeleteAll"
+                  v-if="this.selectedRowKeys.length != 0"
+                />
+                <button 
+                  class="px-2 rounded-md d-flex align-items-center justify-content-center"
+                  style="border: 1px solid #ddd; background-color: #fff; width: 34px; height: 34px;"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="14"
@@ -141,7 +178,14 @@ export default defineComponent({
             :data-source="this.dataSort"
             :pagination="false"
             :loading="this.loading"
+            :row-key="(record) => record.id"
             bordered
+            :rowSelection="{
+              selectedRowKeys: selectedRowKeys,
+              onChange: onSelectChange,
+              hideDefaultSelections: false,
+              selections: false,
+            }"
           >
             <a-table-column :title="$t('Category name')">
               <template #default="{ record }">
@@ -206,7 +250,7 @@ export default defineComponent({
 
 <style scoped lang="css">
   .box-file-search {
-    width: 250px;
+    width: 300px;
   }
 
   .ant-input-affix-wrapper {

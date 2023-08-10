@@ -3,6 +3,9 @@ import "../../sass/dashboard.sass";
 import "../../sass/collection.sass";
 import { formatMoney } from "../../composables/convert/convertVN";
 import { toastNotification } from "../../components/Notification";
+import ModalDeleteAll from "../../components/Modal/ModalDeleteAll.vue";
+import ModalExportProduct from "../../components/Modal/ModalExportProduct.vue";
+import ModalImportProduct from "../../components/Modal/ModalImportProduct.vue";
 
 import { defineComponent, createVNode } from "vue";
 import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined, DownloadOutlined } from "@ant-design/icons-vue";
@@ -10,7 +13,7 @@ import { Modal } from "ant-design-vue";
 
 import { useUser } from "../../composables/useUser";
 import { useStore } from "../../pinia/store";
-import { collection, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, setDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 export default defineComponent({
   name: "Products",
   components: {
@@ -19,7 +22,10 @@ export default defineComponent({
     EditOutlined,
     DeleteOutlined,
     DownloadOutlined,
-    Modal
+    Modal,
+    ModalDeleteAll,
+    ModalExportProduct,
+    ModalImportProduct
   },
   setup(){
     return {
@@ -36,7 +42,11 @@ export default defineComponent({
       store,
       db: store.db,
       uidData,
-      dataSort: []
+      dataSort: [],
+      selectedRowKeys: [],
+      selectedRows: [],
+      title: 'sản phẩm',
+      nameOption: 'Products'
     }
   },
   created() {
@@ -100,11 +110,27 @@ export default defineComponent({
     handleChangeSearch(e) {
       let keyword = e.target.value;
       this.dataSort = this.dataTable.filter(task => !keyword || task.name.toLowerCase().includes(keyword));
+    },
+    async handleImportProduct(data) {
+      this.dataSort = [...this.dataSort, ...data];
+      this.dataTable = [...this.dataTable, ...data];
+      await data.map(el => {
+        setDoc(doc(this.db, this.uidData + 'Products', `${el.id}`), el)
+      })
+    },
+    handleDeleteAll(data) {
+      console.log('data', data)
+      this.dataSort = [...data];
+      this.dataTable = [...data];
+      this.selectedRowKeys = [];
+    },
+    onSelectChange(selectedRowKeys, selectedRows) {
+      this.selectedRows = selectedRows;
+      this.selectedRowKeys = selectedRowKeys;
     }
   }
 })
 </script>
-
 
 <template>
   <div class="collection-container">
@@ -131,16 +157,35 @@ export default defineComponent({
       <div class="collection-media-table">
         <div class="media-table-header">
           <div class="media-table-header-left text-16" style="color: var(--text-color-black)">
-            {{ $t('Products') }} <span style="text-transform: lowercase;">{{ this.dataSort.length }} {{ $t('Products') }}</span>
+            {{ $t('Products') }} 
+            <span style="text-transform: lowercase;">{{ this.dataSort.length }} {{ $t('Products') }}</span>
+            <span style="text-transform: lowercase; background-color: #FFFAEB; color: #DC6803; border: 1px solid #DC6803" v-if="this.selectedRowKeys.length != 0"> 
+              {{ this.selectedRowKeys.length }} {{ $t('Selected') }}
+            </span>
           </div>
           <div class="media-table-header-right">
             <div class="header-right">
               <div class="media-header-upload d-flex gap-4">
-                <button style="height: 34px; width: 34px; border: 1px solid #ddd; background-color: #fff;">
-                  <download-outlined class="text-18"/>
-                </button>
+                <ModalDeleteAll 
+                  :data="
+                    {
+                      selectedRows: this.selectedRows,
+                      selectedRowKeys: this.selectedRowKeys,
+                      uidData: this.uidData,
+                      dataSort: this.dataSort,
+                      title: this.title
+                    } 
+                  "
+                  @isHandleDeleteAll="handleDeleteAll"
+                  v-if="this.selectedRowKeys.length != 0"
+                />
+                <ModalExportProduct :dataTable="this.dataTable" v-if="this.dataTable.length != 0"/>
+                <ModalImportProduct 
+                  @isHandleImportProduct="handleImportProduct"
+                  :uidData="uidData"
+                />
                 <div class="media-header-upload-select">
-                  <select @change="handleChangeSelect">
+                  <select @change="handleChangeSelect" class="rounded-md">
                     <option value="-1">{{ $t('All') }}</option>
                     <option value="0">{{ $t('Visible') }}</option>
                     <option value="1">{{ $t('Hidden') }}</option>
@@ -150,13 +195,22 @@ export default defineComponent({
             </div>
           </div>
         </div>
+
         <div class="media-table-body">
           <a-table
             class="table-page-active"
             :data-source="this.dataSort"
             :pagination="false"
             :loading="this.loading"
+            :row-key="(record) => record.id"
             bordered
+
+            :rowSelection="{
+              selectedRowKeys: selectedRowKeys,
+              onChange: onSelectChange,
+              hideDefaultSelections: false,
+              selections: false,
+            }"
           >
             <a-table-column :title="$t('Product name')">
               <template #default="{ record }">
@@ -242,7 +296,7 @@ export default defineComponent({
 
 <style scoped lang="css">
   .box-file-search {
-    width: 250px;
+    width: 300px;
   }
   .ant-input-affix-wrapper {
     height: 100%;

@@ -14,8 +14,6 @@ import {
 import { db } from "../firebase";
 import app from "../firebase";
 
-import createI18n from "../composables/i18n";
-
 import { toastNotification } from "../components/Notification/index";
 
 const { getUser } = useUser();

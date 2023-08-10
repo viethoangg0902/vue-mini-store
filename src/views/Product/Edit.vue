@@ -41,7 +41,6 @@ export default defineComponent({
     Editor,
     setupEditor,
     EditVariations,
-
     ModalCollection,
     ModalSortImage
   },

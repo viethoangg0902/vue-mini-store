@@ -88,6 +88,7 @@ export default defineComponent({
       this.quantity = data.quantity;
     },
     handleChangeCategory(value) {
+      console.log('value', value)
       this.categories = [...value];
     },
     handleChangeName(name) {
@@ -100,54 +101,34 @@ export default defineComponent({
     },
     handleChangePrice(type) {
       let currentValue = event.target.value;
-      
-      // switch (type) {
-      //   case 'price':
-      //     if(value == "") {
-      //       this.price = "0";
-      //     } else {
-      //       this.price = `${this.formatMoneyChange(currentValue.replace(/[^0-9]/g, ''))}`
-      //     }
-      //     break;
-      //   case 'original_price':
-      //     if(value == "") {
-      //       this.original_price = "0";
-      //     } else {
-      //       this.original_price = `${this.formatMoneyChange(currentValue.replace(/[^0-9]/g, ''))}`
-      //     }
-      //     break;
-      //   default:
-      //     break;
 
-        const charCode = event.which ? event.which : event.keyCode;
-        switch(type) {
-          case 'price':
-            if(currentValue == '') {
-              this.price = '0'
+      const charCode = event.which ? event.which : event.keyCode;
+      switch(type) {
+        case 'price':
+          if(currentValue == '') {
+            this.price = '0'
+          } else {
+            if(charCode > 31 && (charCode < 48 || charCode > 57)) {
+              this.price = `${this.formatMoneyChange(`${this.price}`)}`;
             } else {
-              if(charCode > 31 && (charCode < 48 || charCode > 57)) {
-                this.price = `${this.formatMoneyChange(`${this.price}`)}`;
-              } else {
-                this.price = `${this.formatMoneyChange(`${this.price}`)}`
-              }
+              this.price = `${this.formatMoneyChange(`${this.price}`)}`
             }
-            break;
-          case 'original_price':
-            if(currentValue == '') {
-              this.original_price = '0'
+          }
+          break;
+        case 'original_price':
+          if(currentValue == '') {
+            this.original_price = '0'
+          } else {
+            if(charCode > 31 && (charCode < 48 || charCode > 57)) {
+              this.original_price = `${this.formatMoneyChange(`${this.original_price}`)}`;;
             } else {
-              if(charCode > 31 && (charCode < 48 || charCode > 57)) {
-                this.original_price = `${this.formatMoneyChange(`${this.original_price}`)}`;;
-              } else {
-                this.original_price = `${this.formatMoneyChange(`${this.original_price}`)}`
-              }
+              this.original_price = `${this.formatMoneyChange(`${this.original_price}`)}`
             }
-            break;
-          default:
-            break;
+          }
+          break;
+        default:
+          break;
       }
-
-      
     },    
     async handleNewProduct() {
       if(this.name == "" || this.sku == "") {

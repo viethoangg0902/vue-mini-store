@@ -68,5 +68,11 @@
   "Name": "Name",
   "Phone number": "Phone number",
   "Display name": "Display name",
-  "Avatar": "Avatar"
+  "Avatar": "Avatar",
+  "Warning": "Warning",
+  "To successfully import products, excel files need to be written in the correct sample file format": "To successfully import products, excel files need to be written in the correct sample file format",
+  "Your file is missing a field": "Your file is missing a field",
+  "Selected": "Selected",
+  "Are you sure you want to delete this product? This action cannot be undone": "Are you sure you want to delete this product? This action cannot be undone",
+  "Are you sure you want to delete this category? This action cannot be undone": "Are you sure you want to delete this category? This action cannot be undone"
 }
