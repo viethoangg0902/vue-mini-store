@@ -173,7 +173,8 @@ export default defineComponent({
                       selectedRowKeys: this.selectedRowKeys,
                       uidData: this.uidData,
                       dataSort: this.dataSort,
-                      title: this.title
+                      title: this.title,
+                      nameOption: nameOption
                     } 
                   "
                   @isHandleDeleteAll="handleDeleteAll"
