@@ -7,6 +7,8 @@ import { toastNotification } from "../../components/Notification/index";
 import AddVariations from "../../components/Variations/Create.vue";
 import ModalCollection from "../../components/Modal/ModalCollection.vue";
 
+import InputPrices from "../../components/Input/InputPrice.vue";
+
 import { setupEditor } from "../../components/Tinymce/index";
 import Editor from '@tinymce/tinymce-vue';
 import { defineComponent } from 'vue';
@@ -27,7 +29,7 @@ export default defineComponent({
     Editor,
     setupEditor,
     AddVariations,
-
+    InputPrices,
     ModalCollection
   },
   setup() {
@@ -98,38 +100,7 @@ export default defineComponent({
         .replace(/_$/g, "")
 
       this.handleCheckSlug(this.slug);
-    },
-    handleChangePrice(type) {
-      let currentValue = event.target.value;
-
-      const charCode = event.which ? event.which : event.keyCode;
-      switch(type) {
-        case 'price':
-          if(currentValue == '') {
-            this.price = '0'
-          } else {
-            if(charCode > 31 && (charCode < 48 || charCode > 57)) {
-              this.price = `${this.formatMoneyChange(`${this.price}`)}`;
-            } else {
-              this.price = `${this.formatMoneyChange(`${this.price}`)}`
-            }
-          }
-          break;
-        case 'original_price':
-          if(currentValue == '') {
-            this.original_price = '0'
-          } else {
-            if(charCode > 31 && (charCode < 48 || charCode > 57)) {
-              this.original_price = `${this.formatMoneyChange(`${this.original_price}`)}`;;
-            } else {
-              this.original_price = `${this.formatMoneyChange(`${this.original_price}`)}`
-            }
-          }
-          break;
-        default:
-          break;
-      }
-    },    
+    },  
     async handleNewProduct() {
       if(this.name == "" || this.sku == "") {
         toastNotification('error', 'Tạo không thành công', '');
@@ -156,6 +127,18 @@ export default defineComponent({
         name: this.$route.meta.text,
         params: {}
       })
+    },
+    changePrice(data) {
+      switch(data.type) {
+        case 'price':
+          this.price = data.dataPrice
+          break;
+        case 'original_price':
+          this.original_price = data.dataPrice
+          break
+        default:
+          break;
+      }
     }
   }
 })
@@ -171,7 +154,7 @@ export default defineComponent({
             :to="{ name: 'Products', params: {} }"
             class="border-0 cursor-pointer"
           >
-          {{ $t('Cancel')}}
+            {{ $t('Cancel')}}
           </router-link>
           <button class="btn-green border-0 cursor-pointer" @click="handleNewProduct()">
             <plus-outlined class="text-15" />
@@ -311,10 +294,10 @@ export default defineComponent({
                       <a-col :span="12" class="pr-3">
                         <div class="label-group">
                           <label>{{ $t('Price') }}</label>
-                          <div class="relative">
+                          <!-- <div class="relative">
                             <input 
                               v-model="this.price" 
-                              @keyup="handleChangePrice('price')" 
+                              :max-length="25"
                               class="label-group-input d-block w-full"
                               style="padding-left: 30px;"
                               type="text"
@@ -322,24 +305,28 @@ export default defineComponent({
                             <div class="absolute top-0 bottom-0 left-0 h-100 d-flex align-items-center pl-2">
                               (đ)
                             </div>
-                          </div>
+                          </div> -->
+                          <InputPrices 
+                            :data="{ dataPrice: this.price !== 0 && this.price !== '' && this.price.includes(',')
+                              ? parseInt(this.price.replace(/,/g, ''))
+                              : parseInt(this.price),
+                              title: 'price'
+                            }"
+                            @isChangePrice="changePrice"
+                          />
                         </div>
                       </a-col>
                       <a-col :span="12" class="pl-3">
                         <div class="label-group">
                           <label>{{ $t('Original price') }}</label>
-                          <div class="relative">
-                            <input 
-                              v-model="this.original_price" 
-                              @keyup="handleChangePrice('original_price')"  
-                              class="label-group-input d-block w-full"
-                              style="padding-left: 30px;"
-                              type="text"
-                            />
-                            <div class="absolute top-0 bottom-0 left-0 h-100 d-flex align-items-center pl-2">
-                              (đ)
-                            </div>
-                          </div>
+                          <InputPrices 
+                            :data="{ dataPrice: this.original_price !== 0 && this.original_price !== '' && this.original_price.includes(',')
+                              ? parseInt(this.original_price.replace(/,/g, ''))
+                              : parseInt(this.original_price),
+                              title: 'original_price'
+                            }"
+                            @isChangePrice="changePrice"
+                          />
                         </div>
                       </a-col>
                     </a-row>
@@ -348,7 +335,7 @@ export default defineComponent({
               </div>
               <div class="ant-card ant-card-bordered">
                 <AddVariations
-                :dataVariations="{
+                  :dataVariations="{
                     name: this.name,
                     price:
                       this.price !== 0 && this.price !== '' && this.price.includes(',')

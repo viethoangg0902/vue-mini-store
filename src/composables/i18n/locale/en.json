@@ -74,5 +74,8 @@
   "Your file is missing a field": "Your file is missing a field",
   "Selected": "Selected",
   "Are you sure you want to delete this product? This action cannot be undone": "Are you sure you want to delete this product? This action cannot be undone",
-  "Are you sure you want to delete this category? This action cannot be undone": "Are you sure you want to delete this category? This action cannot be undone"
+  "Are you sure you want to delete this category? This action cannot be undone": "Are you sure you want to delete this category? This action cannot be undone",
+  "Orders": "Orders",
+  "Import excel file successfully": "Import excel file successfully",
+  "Create Orders": "Create Orders"
 }

@@ -10,7 +10,7 @@ import { collection, setDoc, doc, getDocs } from "firebase/firestore";
 const requireFields = ["Loại", "Mã sản phẩm", "Tên", "Mô tả ngắn", "Giá bán", "Giá gốc", "Danh mục", "Hình ảnh"]
 const optionFields = ["Tên thuộc tính 1", "Giá trị thuộc tính 1", "Tên thuộc tính 2", "Giá trị thuộc tính 2", "Tên thuộc tính 3", "Giá trị thuộc tính 3"]
 export default {
-  name: 'ModalExportProduct',
+  name: 'ModalImportProduct',
   components: {
     UploadOutlined,
     PictureOutlined

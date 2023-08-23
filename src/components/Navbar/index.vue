@@ -9,6 +9,7 @@ import {
   FolderOpenOutlined,
   AppstoreAddOutlined,
   UserAddOutlined,
+  ShopOutlined
 } from "@ant-design/icons-vue";
 export default {
   name: 'Navbar',
@@ -17,7 +18,8 @@ export default {
     FolderOpenOutlined,
     AppstoreOutlined,
     AppstoreAddOutlined,
-    UserAddOutlined
+    UserAddOutlined,
+    ShopOutlined
   },
   setup() {
 
@@ -42,6 +44,21 @@ export default {
           </div>
           <div class="ant-menu-item-title text-15 fw-400 pl-2">
             {{ $t('Dashboard') }}
+          </div>
+        </div>
+      </router-link>
+    </li>
+    <li class="my-1">
+      <router-link
+        class="ant-menu-item py-3"
+        :to="{ name: 'Orders', params: {} }"
+      >
+        <div class="ant-menu-items-group d-flex align-items-center">
+          <div class="ant-menu-item-icon d-flex align-items-center">
+            <shop-outlined class="text-17"/>
+          </div>
+          <div class="ant-menu-item-title text-15 fw-400 pl-2">
+            {{ $t('Orders') }}
           </div>
         </div>
       </router-link>

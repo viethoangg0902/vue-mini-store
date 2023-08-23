@@ -9,6 +9,8 @@ import { CloudUploadOutlined, DeleteOutlined, PlusCircleOutlined, FolderOpenOutl
 import { getDoc, doc, updateDoc } from "firebase/firestore"; 
 import useStorage from "../../composables/useStorage";
 
+import InputPrice from "../../components/Input/InputPrice.vue";
+
 import { useUser } from "../../composables/useUser";
 import { useStore } from "../../pinia/store";
 import { toastNotification } from "../../components/Notification";
@@ -19,7 +21,7 @@ export default {
     DeleteOutlined,
     PlusCircleOutlined,
     FolderOpenOutlined,
-
+    InputPrice,
     ModalCollection
   },
   setup() {
@@ -96,37 +98,6 @@ export default {
       })
       this.getDataVariation(id);
     },
-    handleChangePrice(type) {
-      let currentValue = event.target.value;
-      const charCode = event.which ? event.which : event.keyCode;
-
-      switch(type) {
-        case 'price':
-          if(currentValue == '') {
-            this.dataVariat[0].price = '0'
-          } else {
-            if(charCode > 31 && (charCode < 48 || charCode > 57)) {
-              this.price = `${this.formatMoneyChange(`${this.dataVariat[0].price}`)}`;
-            } else {
-              this.price = `${this.formatMoneyChange(`${this.price}`)}`
-            }
-          }
-          break;
-        case 'original_price':
-          if(currentValue == '') {
-            this.dataVariat[0].original_price = '0'
-          } else {
-            if(charCode > 31 && (charCode < 48 || charCode > 57)) {
-              this.original_price = `${this.formatMoneyChange(`${this.dataVariat[0].original_price}`)}`;
-            } else {
-              this.original_price = `${this.formatMoneyChange(`${this.original_price}`)}`
-            }
-          }
-          break;
-        default:
-          break;
-      } 
-    },
     async handleUpVariat() {
       for(let variat of this.listVariat) {
         if(variat.id == this.idVariat) {
@@ -144,6 +115,18 @@ export default {
         quantity: this.quantity
       })
       toastNotification('success', 'Cập nhật thành công', '');
+    },
+    changePrice(data) {
+      switch(data.type) {
+        case 'price':
+          this.price = data.dataPrice
+          break;
+        case 'original_price':
+          this.original_price = data.dataPrice
+          break
+        default:
+          break;
+      }
     }
   }
 }
@@ -287,7 +270,7 @@ export default {
                   <a-col :span="12" class="pr-4">
                     <div class="label-group">
                       <label>{{ $t('Variant price') }}</label>
-                      <div class="relative">
+                      <!-- <div class="relative">
                         <input 
                           v-model="this.price" 
                           @keyup="handleChangePrice('price')" 
@@ -298,24 +281,29 @@ export default {
                         <div class="absolute top-0 bottom-0 right-0 h-100 d-flex align-items-center pr-3">
                           (đ)
                         </div>
-                      </div>
+                      </div> -->
+
+                      <InputPrice 
+                        :data="{ dataPrice: this.price !== 0 && this.price !== '' && this.price.includes(',')
+                          ? parseInt(this.price.replace(/,/g, ''))
+                          : parseInt(this.price),
+                          title: 'price'
+                        }"
+                        @isChangePrice="changePrice"
+                      />
                     </div>
                   </a-col>
                   <a-col :span="12" class="pl-4">
                     <div class="label-group">
                       <label>{{ $t('Variant original price' )}}</label>
-                      <div class="relative">
-                        <input 
-                          v-model="this.original_price" 
-                          @keyup="handleChangePrice('original_price')"  
-                          class="label-group-input d-block w-full"
-                          style="padding-left: 10px;"
-                          type="text"
-                        />
-                        <div class="absolute top-0 bottom-0 right-0 h-100 d-flex align-items-center pr-3">
-                          (đ)
-                        </div>
-                      </div>
+                      <InputPrice 
+                        :data="{ dataPrice: this.original_price !== 0 && this.original_price !== '' && this.original_price.includes(',')
+                          ? parseInt(this.original_price.replace(/,/g, ''))
+                          : parseInt(this.original_price),
+                          title: 'original_price'
+                        }"
+                        @isChangePrice="changePrice"
+                      />
                     </div>
                   </a-col>
                 </a-row>
@@ -342,10 +330,10 @@ export default {
                       <label>{{ $t('Quantity') }}</label>
                       <div class="relative">
                         <input 
-                          v-model="this.remain_quantity" 
+                          v-model.number="this.remain_quantity" 
                           class="label-group-input d-block w-full"
                           style="padding-left: 10px;"
-                          type="number"
+                          type="text"
                         />
                       </div>
                     </div>

@@ -44,9 +44,7 @@ export default defineComponent({
       uidData,
       dataSort: [],
       selectedRowKeys: [],
-      selectedRows: [],
-      title: 'sản phẩm',
-      nameOption: 'Products'
+      selectedRows: []
     }
   },
   created() {
@@ -117,6 +115,7 @@ export default defineComponent({
       await data.map(el => {
         setDoc(doc(this.db, this.uidData + 'Products', `${el.id}`), el)
       })
+      toastNotification('success', 'Nhập file excel thành công', '')
     },
     handleDeleteAll(data) {
       console.log('data', data)
@@ -173,8 +172,8 @@ export default defineComponent({
                       selectedRowKeys: this.selectedRowKeys,
                       uidData: this.uidData,
                       dataSort: this.dataSort,
-                      title: this.title,
-                      nameOption: nameOption
+                      title: 'sản phẩm',
+                      nameOption: 'Products'
                     } 
                   "
                   @isHandleDeleteAll="handleDeleteAll"

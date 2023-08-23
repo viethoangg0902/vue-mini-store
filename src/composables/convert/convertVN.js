@@ -21,7 +21,6 @@ export const formatMoney = (num) => {
 
 export const formatMoneyChange = (value) => {
   if (value === "") return;
-  // value = value.length != 0 ? value.join(",") : value.toString(); 
   value = value.toString().includes('0') ? value.toString().replace(/^0+/, '') : value.toString();
   value = value.toString().includes(',') ? value.toString().replace(/,/g, "") : value.toString();
   if (value.length > 3) {
@@ -37,3 +36,27 @@ export const formatMoneyChange = (value) => {
     return value;
   }
 };
+
+export const formatNumber = (value) => {
+  value += "";
+  const list = value.split(".");
+  let num = list[0];
+
+  if (num.charAt(0) === "0" && num.length > 1) {
+    num = num.charAt(1) + num.slice(2);
+  }
+
+  const prefix = num.charAt(0) === "-" ? "-" : "";
+  num = prefix ? num.slice(1) : num;
+
+  let result = "";
+  while (num.length > 3) {
+    result = `,${num.slice(-3)}${result}`;
+    num = num.slice(0, num.length - 3);
+  }
+
+  if (num) {
+    result = num + result;
+  }
+  return `${prefix}${result}${list[1] ? `.${list[1]}` : ""}`;
+}

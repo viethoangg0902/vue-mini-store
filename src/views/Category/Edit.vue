@@ -51,7 +51,6 @@ export default defineComponent({
   },
   created() {
     this.getDataInCategory();
-    console.log(this.store.listFiles)
   },
   methods: {
     async getDataInCategory(){

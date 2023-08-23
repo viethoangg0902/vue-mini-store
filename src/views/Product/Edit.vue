@@ -7,6 +7,7 @@ import { toastNotification } from "../../components/Notification/index";
 import EditVariations from "../../components/Variations/EditVariant.vue";
 import ModalCollection from "../../components/Modal/ModalCollection.vue";
 import ModalSortImage from "../../components/Modal/ModalSortImage.vue";
+import InputPrices from "../../components/Input/InputPrice.vue";
 
 import { setupEditor } from "../../components/Tinymce/index";
 import Editor from '@tinymce/tinymce-vue';
@@ -25,7 +26,7 @@ import { Modal } from "ant-design-vue";
 import { useUser } from "../../composables/useUser";
 import { useStore } from "../../pinia/store";
 import useStorage from "../../composables/useStorage";
-import { collection, getDocs, getDoc, updateDoc, doc, deleteDoc } from "firebase/firestore"; 
+import { collection, getDocs, getDoc, updateDoc, doc, deleteDoc,setDoc } from "firebase/firestore"; 
 
 export default defineComponent({
   name: "EditProduct",
@@ -42,7 +43,8 @@ export default defineComponent({
     setupEditor,
     EditVariations,
     ModalCollection,
-    ModalSortImage
+    ModalSortImage,
+    InputPrices
   },
   setup() {
     return {
@@ -78,9 +80,12 @@ export default defineComponent({
       attributes: [],
       quantity: 0,
       is_hidden: true,
-
       multiple: true,
-      dataImage: []
+      dataImage: [],
+      addCategories: [],
+      removeCategories: [],
+      filterCategories: [],
+      total_products: 0
     }
   },
   created() {
@@ -118,6 +123,15 @@ export default defineComponent({
       const data = await getDocs(collection(this.db, this.uidData + "Categories"));
       const task = data.docs.map((doc) => doc.data().name)
       this.options = task.map(i => ({ value: i }));
+      this.filterCategories = Array.from(new
+        Set(data.docs.map((doc) => {
+        return {
+            total_products: doc.data().total_products,
+            name: doc.data().name,
+            id: doc.id
+          }
+        })
+      ))
     },
     async handleCheckSlug(slug) {
       const data = await getDocs(collection(this.db, this.uidData + 'Products'));
@@ -137,45 +151,17 @@ export default defineComponent({
     },
     handleChangeCategory(value) {
       this.categories = [...value];
+      this.addCategories = this.filterCategories.filter(el => value.includes(el.name))
+      this.removeCategories = this.filterCategories.filter(el => !value.includes(el.name))
     },
     handleChangeName(name) {
       let value = name.target.value;
+      this.name = value;
       this.slug = convertVN(value)
         .replace(/ /g, "-")
         .replace(/_$/g, "")
 
       this.handleCheckSlug(this.slug);
-    },
-    handleChangePrice(type) {
-      let value = event.target.value;
-      const charCode = event.which ? event.which : event.keyCode;
-
-      switch (type) {
-        case 'price':
-          if(value == "") {
-            this.price = "0";
-          } else {
-            if(charCode > 31 && (charCode < 48 || charCode > 57)) {
-              this.price = `${this.formatMoneyChange(`${this.dataProduct.price}`)}`;
-            } else {
-              this.price = `${this.formatMoneyChange(`${this.price}`)}`
-            }
-          }
-          break;
-        case 'original_price':
-          if(value == "") {
-            this.original_price = "0";
-          } else {
-            if(charCode > 31 && (charCode < 48 || charCode > 57)) {
-              this.original_price = `${this.formatMoneyChange(`${this.dataProduct.original_price}`)}`;
-            } else {
-              this.original_price = `${this.formatMoneyChange(`${this.original_price}`)}`
-            }
-          }
-          break;
-        default:
-          break;
-      }
     },    
     async handleChangeIsHidden(id) {
       this.is_hidden = !this.is_hidden
@@ -221,7 +207,46 @@ export default defineComponent({
           variations: this.variations,
           attributes: this.attributes
         })
+
+        this.addCategories.map(async el => {
+          await setDoc(doc(this.db, this.uidData + 'Categories', `${el.id}`, 'Products', `${this.uid}`), {
+            name: this.name,
+            slug: this.slug,
+            description: this.description,
+            sku: this.sku,
+            images: await this.onUploadFile(this.store.listFiles, this.uidUser),
+            price: Number(this.price.replaceAll(/,/g, '')),
+            original_price: Number(this.original_price.replaceAll(/,/g, '')),
+            quantity: this.quantity,
+            variations: this.variations,
+            attributes: this.attributes
+          })
+          const data = await getDocs(collection(this.db, this.uidData + 'Categories', `${el.id}`, 'Products'));
+          await updateDoc(doc(this.db, this.uidData + 'Categories', `${el.id}`), {
+            total_products: data.docs.length
+          })
+        })
+
+        this.removeCategories.map(async el => {
+          await deleteDoc(doc(this.db, this.uidData + 'Categories', `${el.id}`, 'Products', `${this.uid}`))
+          const data1 = await getDocs(collection(this.db, this.uidData + 'Categories', `${el.id}`, 'Products'));
+          await updateDoc(doc(this.db, this.uidData + 'Categories', `${el.id}`), {
+            total_products: data1.docs.length
+          })
+        })
         toastNotification('success', 'Cập nhật thành công', '');
+      }
+    },
+    changePrice(data) {
+      switch(data.type) {
+        case 'price':
+          this.price = data.dataPrice
+          break;
+        case 'original_price':
+          this.original_price = data.dataPrice
+          break
+        default:
+          break;
       }
     }
   }
@@ -420,35 +445,27 @@ export default defineComponent({
                       <a-col :span="12" class="pr-3">
                         <div class="label-group">
                           <label>{{ $t('Price') }}</label>
-                          <div class="relative">
-                            <input 
-                              v-model="this.price" 
-                              @keyup="handleChangePrice('price')" 
-                              class="label-group-input d-block w-full"
-                              style="padding-left: 30px;"
-                              type="text"
-                            />
-                            <div class="absolute top-0 bottom-0 left-0 h-100 d-flex align-items-center pl-2">
-                              (đ)
-                            </div>
-                          </div>
+                          <InputPrices 
+                            :data="{ dataPrice: this.price !== 0 && this.price !== '' && this.price.includes(',')
+                              ? parseInt(this.price.replace(/,/g, ''))
+                              : parseInt(this.price),
+                              title: 'price'
+                            }"
+                            @isChangePrice="changePrice"
+                          />
                         </div>
                       </a-col>
                       <a-col :span="12" class="pl-3">
                         <div class="label-group">
                           <label>{{ $t('Original price') }}</label>
-                          <div class="relative">
-                            <input 
-                              v-model="this.original_price" 
-                              @keyup="handleChangePrice('original_price')"  
-                              class="label-group-input d-block w-full"
-                              style="padding-left: 30px;"
-                              type="text"
-                            />
-                            <div class="absolute top-0 bottom-0 left-0 h-100 d-flex align-items-center pl-2">
-                              (đ)
-                            </div>
-                          </div>
+                          <InputPrices 
+                            :data="{ dataPrice: this.original_price !== 0 && this.original_price !== '' && this.original_price.includes(',')
+                              ? parseInt(this.original_price.replace(/,/g, ''))
+                              : parseInt(this.original_price),
+                              title: 'original_price'
+                            }"
+                            @isChangePrice="changePrice"
+                          />
                         </div>
                       </a-col>
                     </a-row>

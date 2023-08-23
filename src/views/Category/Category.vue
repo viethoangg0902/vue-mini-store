@@ -33,9 +33,7 @@ export default defineComponent({
       uidData,
       dataSort: [],
       selectedRowKeys: [],
-      selectedRows: [],
-      title: 'danh mục',
-      nameOption: 'Categories'
+      selectedRows: []
     }
   },
   created() {
@@ -144,8 +142,8 @@ export default defineComponent({
                       selectedRowKeys: this.selectedRowKeys,
                       uidData: this.uidData,
                       dataSort: this.dataSort,
-                      title: title,
-                      nameOption: nameOption
+                      title: 'danh mục',
+                      nameOption: 'Categories'
                     } 
                   "
                   @isHandleDeleteAll="handleDeleteAll"

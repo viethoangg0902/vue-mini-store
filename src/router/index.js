@@ -59,6 +59,30 @@ const router = createRouter({
       },
       beforeEnter: requiresAuth,
     },
+    //orders
+    {
+      path: "/dashboard/orders",
+      name: "Orders",
+      component: () => import("../views/Orders/index.vue"),
+      meta: {
+        leading: "/dashboard/orders",
+        text: 'Orders',
+        layout: layoutDashboard,
+      },
+      beforeEnter: requiresAuth,
+    },
+    {
+      path: "/dashboard/orders/create",
+      name: "Create Orders",
+      component: () => import("../views/Orders/CreateOrders.vue"),
+      meta: {
+        leading: "/dashboard/orders",
+        text: 'Orders',
+        children: 'Create Orders',
+        layout: layoutDashboard,
+      },
+      beforeEnter: requiresAuth,
+    },
     {
       path: "/dashboard/collection",
       name: "Collection",

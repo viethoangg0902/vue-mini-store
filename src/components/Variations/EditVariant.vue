@@ -43,7 +43,6 @@ export default {
   created() {
     this.listAttributes = [...this.dataVariations?.attributes];
     this.listVariations = [...this.dataVariations.variations];
-    // console.log("dataVariations", this.dataVariations);
   },
   emits: ["transmissionVariations"],
   methods: {

@@ -74,5 +74,8 @@
   "Your file is missing a field": "Tệp của bạn bị thiếu một trường",
   "Selected": "Đã chọn",
   "Are you sure you want to delete this product? This action cannot be undone": "Bạn có chắc chắn muốn xóa sản phẩm này không? Hành động này không thể được hoàn tác",
-  "Are you sure you want to delete this category? This action cannot be undone": "Bạn có chắc chắn muốn xoá danh mục này không? Hành động này không thể được hoàn tác"
+  "Are you sure you want to delete this category? This action cannot be undone": "Bạn có chắc chắn muốn xoá danh mục này không? Hành động này không thể được hoàn tác",
+  "Orders": "Đơn hàng",
+  "Import excel file successfully": "Nhập file excel thành công",
+  "Create Orders": "Tạo đơn mới"
 }

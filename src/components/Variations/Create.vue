@@ -1,6 +1,6 @@
 <script>
 import { PlusOutlined, DownOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons-vue";
-import { convertVN, formatMoney } from "../../composables/convert/convertVN";
+import { convertVN, formatMoney, formatMoneyChange, formatNumber } from "../../composables/convert/convertVN";
 import { useStore } from "../../pinia/store";
 export default {
   name: "AddVariations",
@@ -19,7 +19,9 @@ export default {
   setup() {
     return {
       convertVN, 
-      formatMoney
+      formatMoney,
+      formatMoneyChange,
+      formatNumber
     }
   },
   data() {
@@ -72,6 +74,8 @@ export default {
       this.handleChange()
     },
     handleChange(attr) {
+      console.log("dataVariations", this.dataVariations)
+      
       this.handleAddVariaions(this.listAttributes)
       this.quantity = 0
       this.$emit('transmissionVariations', 
@@ -114,7 +118,7 @@ export default {
             id: this.store.randomID(),
             product_name: this.dataVariations.name,
             name: this.dataVariations.name + ' - ' + properties.map((i) => i.value).join(" / "),
-            sku: this.dataVariations.sku + '_' + convertVN(properties.map((i) => i.value).join(" / ")).toUpperCase()
+            sku: this.dataVariations.sku + '_' +  convertVN(properties.map((i) => i.value).join(" / ")).toUpperCase()
                                                   .replaceAll(" / ", "_") 
                                                   .replace(" ", "_"),
             price: this.dataVariations.price,
@@ -239,10 +243,14 @@ export default {
             <a-table-column :title="$t('SKU')" class="w-25">
               <template #default="{ record }">
                 <span class="fw-300">
-                  {{ this.dataVariations.sku + '_' + 
-                    convertVN(record.title).toUpperCase()
-                      .replaceAll(" / ", "_") 
-                      .replace(" ", "_")
+                  {{ this.dataVariations.sku != '' ? this.dataVariations.sku + '_' + 
+                                                      convertVN(record.title).toUpperCase()
+                                                        .replaceAll(" / ", "_") 
+                                                        .replace(" ", "_")
+                                                   : 
+                                                      convertVN(record.title).toUpperCase()
+                                                        .replaceAll(" / ", "_") 
+                                                        .replace(" ", "_")
                   }}
                 </span>
               </template>
@@ -250,14 +258,14 @@ export default {
             <a-table-column :title="$t('Price') + '(đ)'" class="w-10">
               <template #default="{ record }">
                 <span>
-                  <input type="text" v-model="record.price" @keyup="this.price = $event.target.value" class="py-1 px-3"/> 
+                  <input type="text" v-model.number="record.price" class="py-1 px-3 rounded-md"/> 
                 </span>
               </template>
             </a-table-column>
             <a-table-column :title="$t('Original price') + '(đ)'" class="w-10">
               <template #default="{ record }">
                 <span>
-                  <input type="text" v-model="record.original_price" @keyup="this.original_price = $event.target.value" class="py-1 px-3"/> 
+                  <input type="text" v-model.number="record.original_price" class="py-1 px-3 rounded-md"/> 
                 </span>
               </template>
             </a-table-column>
@@ -265,7 +273,7 @@ export default {
               <template #default="{ record }">
                 <span>
                   <!-- <input v-model="record.remain_quantity" @keyup="this.remain_quantity = Number($event.target.value)" type="number" class="py-1 px-3 input_remain_quantity"/> -->
-                  <input v-model="record.remain_quantity" @change="this.onRemainQuantity(record.remain_quantity)" type="number" class="py-1 px-3 input_remain_quantity"/>
+                  <input v-model.number="record.remain_quantity" @change="this.onRemainQuantity(record.remain_quantity)" type="text" inputmode="decimal" class="py-1 px-3 input_remain_quantity rounded-md"/>
                 </span>
               </template>
             </a-table-column>
